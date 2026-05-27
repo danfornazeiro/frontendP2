@@ -1,0 +1,35 @@
+<section class="create-shell">
+  <div class="header">
+    <p class="eyebrow">cadastro</p>
+    <h1>Criar perfil</h1>
+  </div>
+
+  @if (message()) {
+    <p class="info-banner">{{ message() }}</p>
+  }
+
+  <form [formGroup]="profileForm" class="form-grid">
+    <label>
+      <span>Nome</span>
+      <input type="text" formControlName="nome" />
+    </label>
+    <label>
+      <span>Email</span>
+      <input type="email" formControlName="email" />
+    </label>
+    <label>
+      <span>Telefone</span>
+      <input type="text" formControlName="telefone" />
+    </label>
+    <label>
+      <span>Endereco</span>
+      <input type="text" formControlName="logradouro" />
+    </label>
+    <label>
+      <span>Senha</span>
+      <input type="password" formControlName="senha" />
+    </label>
+  </form>
+
+  <button type="button" class="primary-btn" (click)="submit()">Criar perfil</button>
+</section>

@@ -1,0 +1,33 @@
+<section class="login-shell">
+  <div class="login-card">
+    <div class="login-header">
+      <p class="eyebrow">identificacao</p>
+      <h1>Entrar na drop</h1>
+      <p>Use seu email e senha para continuar.</p>
+    </div>
+
+    @if (message()) {
+      <div class="info-banner">{{ message() }}</div>
+    }
+
+    <form [formGroup]="form" (ngSubmit)="submit()" class="login-form">
+      <label>
+        <span>Email</span>
+        <input type="email" formControlName="email" placeholder="voce@email.com" />
+      </label>
+      <label>
+        <span>Senha</span>
+        <input type="password" formControlName="senha" placeholder="********" />
+      </label>
+
+      <button type="submit" class="primary-btn" [disabled]="loading()">
+        {{ loading() ? 'Entrando...' : 'Entrar' }}
+      </button>
+    </form>
+
+    <div class="login-footer">
+      <p>Sem conta?</p>
+      <a routerLink="/create-profile">Criar perfil</a>
+    </div>
+  </div>
+</section>

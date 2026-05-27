@@ -1,0 +1,39 @@
+<section class="cart-shell">
+  <div class="cart-header">
+    <div>
+      <p class="eyebrow">seu carrinho</p>
+      <h1>Cart Drop</h1>
+    </div>
+    <button type="button" class="primary-btn" (click)="checkout()">Finalizar compra</button>
+  </div>
+
+  @if (message()) {
+    <p class="info-banner">{{ message() }}</p>
+  }
+
+  @if (cartView$ | async; as view) {
+    @if (!view || view.items.length === 0) {
+      <p class="empty">Seu carrinho esta vazio.</p>
+    } @else {
+      <div class="cart-grid">
+        @for (item of view.items; track item.product.id ?? item.product.codigo) {
+          <div class="cart-item">
+            <div>
+              <p class="item-title">{{ item.product.nome }}</p>
+              <p class="item-sub">Qtd: {{ item.quantity }}</p>
+            </div>
+            <div class="item-actions">
+              <span>{{ item.lineTotal | currency: 'BRL' }}</span>
+              <button type="button" (click)="remove(item.product)">Remover</button>
+            </div>
+          </div>
+        }
+      </div>
+
+      <div class="cart-summary">
+        <p>Total de itens: {{ view.count }}</p>
+        <p class="total">Total: {{ view.total | currency: 'BRL' }}</p>
+      </div>
+    }
+  }
+</section>

@@ -1,0 +1,55 @@
+:host {
+  display: block;
+  padding: 2.5rem 2rem 4rem;
+}
+
+.profile-header h1 {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.profile-card {
+  background: var(--bg-elevated);
+  border: 1px solid var(--stroke-muted);
+  border-radius: 16px;
+  padding: 1.5rem;
+  display: grid;
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+
+.label {
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-size: 0.6rem;
+  color: var(--text-muted);
+}
+
+.primary-btn {
+  border: 1px solid var(--accent-glow);
+  background: var(--accent-glow);
+  color: var(--bg-primary);
+  padding: 0.8rem 1.3rem;
+  border-radius: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.25em;
+  font-size: 0.6rem;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.ghost-btn {
+  border: 1px solid var(--stroke-muted);
+  color: var(--text-primary);
+  padding: 0.8rem 1.3rem;
+  border-radius: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.25em;
+  font-size: 0.6rem;
+  text-decoration: none;
+}
+
+.empty {
+  color: var(--text-muted);
+}

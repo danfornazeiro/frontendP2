@@ -1,0 +1,68 @@
+<section class="admin-shell">
+  <div class="header">
+    <p class="eyebrow">gestao</p>
+    <h1>Produtos</h1>
+  </div>
+
+  @if (message()) {
+    <p class="info-banner">{{ message() }}</p>
+  }
+
+  <div class="admin-grid">
+    <div class="panel">
+      <h2>{{ selectedId() ? 'Editar produto' : 'Novo produto' }}</h2>
+      <form [formGroup]="form" class="form-grid">
+        <label>
+          <span>Nome</span>
+          <input type="text" formControlName="nome" />
+        </label>
+        <label>
+          <span>Imagem</span>
+          <input type="text" formControlName="imageUrl" placeholder="https://" />
+        </label>
+        <label>
+          <span>Descricao</span>
+          <textarea rows="3" formControlName="descricao"></textarea>
+        </label>
+        <div class="row">
+          <label>
+            <span>Valor</span>
+            <input type="number" formControlName="valor" />
+          </label>
+          <label>
+            <span>Promo</span>
+            <input type="number" formControlName="promo" />
+          </label>
+        </div>
+        <label>
+          <span>Quantidade</span>
+          <input type="number" formControlName="quantidade" />
+        </label>
+      </form>
+      <div class="actions">
+        <button type="button" class="primary-btn" (click)="submit()">Salvar</button>
+        <button type="button" class="ghost-btn" (click)="resetForm()">Limpar</button>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>Inventario</h2>
+      @if (products$ | async; as products) {
+        <div class="list">
+          @for (product of products; track trackProduct($index, product)) {
+            <div class="list-item">
+              <div>
+                <p class="item-title">{{ product.nome }}</p>
+                <p class="item-sub">{{ product.quantidade }} itens</p>
+              </div>
+              <div class="actions">
+                <button type="button" (click)="edit(product)">Editar</button>
+                <button type="button" (click)="remove(product)">Excluir</button>
+              </div>
+            </div>
+          }
+        </div>
+      }
+    </div>
+  </div>
+</section>

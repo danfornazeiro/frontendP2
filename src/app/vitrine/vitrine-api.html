@@ -1,0 +1,146 @@
+<div class="min-h-screen bg-[#0f0e0c] font-sans">
+  <div
+    class="fixed inset-0 opacity-[0.04] pointer-events-none z-0"
+    style="
+      background-image: url('data:image/svg+xml,%3Csvg viewBox=%220 0 256 256%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noise%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.9%22 numOctaves=%224%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noise)%22/%3E%3C/svg%3E');
+    "
+  ></div>
+
+  <header
+    class="relative z-10 flex flex-col gap-4 md:flex-row md:items-center md:justify-between px-6 md:px-10 py-6 border-b border-[#2a2720]"
+  >
+    <div>
+      <p class="text-[#6b6456] text-[9px] tracking-[0.25em] uppercase mb-2">vitrine online</p>
+      <h1 class="text-[#f0e6cc] text-2xl md:text-3xl font-light tracking-wide" style="font-family: 'Georgia', serif">
+        Produtos do servidor
+      </h1>
+    </div>
+
+    <div class="flex flex-wrap gap-3">
+      <a
+        href="/admin"
+        class="border border-[#e8d5a3] text-[#e8d5a3] text-[10px] tracking-[0.2em] uppercase px-5 py-3 hover:bg-[#e8d5a3] hover:text-[#0f0e0c] transition-all duration-200"
+      >
+        Painel admin
+      </a>
+      <button
+        type="button"
+        (click)="carregarProdutos()"
+        class="border border-[#2a2720] text-[#f0e6cc] text-[10px] tracking-[0.2em] uppercase px-5 py-3 hover:border-[#e8d5a3] transition-all duration-200"
+      >
+        Atualizar vitrine
+      </button>
+    </div>
+  </header>
+
+  <div class="relative z-10 w-full border-b border-[#2a2720] py-8 flex flex-col items-center gap-2">
+    <p class="text-[#6b6456] text-[9px] tracking-[0.25em] uppercase">curadoria</p>
+    <h2 class="text-[#f0e6cc] text-2xl font-light text-center" style="font-family: 'Georgia', serif">
+      Itens carregados direto do backend
+    </h2>
+    <p *ngIf="mensagem" class="text-[#ffb4a8] text-sm mt-1">{{ mensagem }}</p>
+    <p *ngIf="carregando" class="text-[#e8d5a3] text-sm mt-1">Carregando produtos...</p>
+  </div>
+
+  <div
+    class="relative z-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px p-6 md:p-10 bg-[#0f0e0c]"
+  >
+    <div
+      class="group bg-[#0f0e0c] border border-[#1e1c18] hover:border-[#e8d5a3]/40 transition-colors duration-300 p-6 flex flex-col items-center cursor-pointer"
+      *ngFor="let obj of listaProdutos"
+      (click)="abrirDetalhe(obj)"
+    >
+      <p class="text-[#6b6456] text-[9px] tracking-[0.2em] uppercase mb-2">produto</p>
+      <h4
+        class="text-[#f0e6cc] text-base font-light text-center mb-6 tracking-wide"
+        style="font-family: 'Georgia', serif"
+      >
+        {{ obj.nome }}
+      </h4>
+
+      <div class="w-full h-px bg-[#1e1c18] mb-6"></div>
+
+      <div class="flex justify-center items-center mb-6 h-36">
+        <!-- Image removed -->
+      </div>
+
+      <div class="w-full h-px bg-[#1e1c18] mb-5"></div>
+
+      <p class="text-[#6b6456] text-sm leading-relaxed text-center mb-6 line-clamp-3">
+        {{ obj.descricao }}
+      </p>
+
+      <div class="flex flex-col items-center gap-1 mb-6">
+        <span
+          *ngIf="obj.promo > obj.valor"
+          class="text-[#3a342c] text-xs line-through tracking-wide"
+          >R$ {{ obj.valor }}</span
+        >
+        <span class="text-[#e8d5a3] text-2xl font-light" style="font-family: 'Georgia', serif">
+          R$ {{ getPreco(obj) }}
+        </span>
+      </div>
+
+      <button
+        class="w-full border border-[#e8d5a3] text-[#e8d5a3] text-[10px] tracking-[0.2em] uppercase py-3 hover:bg-[#e8d5a3] hover:text-[#0f0e0c] active:scale-[0.98] transition-all duration-200 disabled:opacity-20 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-[#e8d5a3]"
+        [disabled]="obj.quantidade <= 0"
+        (click)="comprarItem(obj); $event.stopPropagation()"
+      >
+        Comprar
+      </button>
+
+      <span
+        *ngIf="obj.quantidade <= 0"
+        class="mt-3 text-[#6b6456] text-[9px] tracking-[0.2em] uppercase"
+        >Sem estoque</span
+      >
+      <span
+        *ngIf="obj.quantidade > 0"
+        class="mt-3 text-[#e8d5a3]/60 text-[9px] tracking-[0.2em] uppercase"
+        >Estoque: {{ obj.quantidade }}</span
+      >
+    </div>
+  </div>
+
+  <footer
+    class="relative z-10 border-t border-[#1e1c18] flex flex-col items-center justify-center gap-4 py-10"
+  >
+    <div class="h-px w-8 bg-[#2a2720]"></div>
+    <p class="text-[#6b6456] text-[9px] tracking-[0.25em] uppercase">siga a gente</p>
+    <h3
+      class="text-[#f0e6cc] text-sm font-light tracking-widest"
+      style="font-family: 'Georgia', serif"
+    >
+      CAEDSS
+    </h3>
+    <a
+      href="https://instagram.com/caedss.caedss"
+      target="_blank"
+      class="text-[#6b6456] hover:text-[#e8d5a3] transition-colors duration-200"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+        <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+      </svg>
+    </a>
+    <div class="h-px w-8 bg-[#1e1c18]"></div>
+  </footer>
+</div>
+
+<app-detalhe-produto
+  *ngIf="produtoSelecionado"
+  [produto]="produtoSelecionado"
+  (fechar)="fecharDetalhe()"
+  (comprar)="comprarProdutoSelecionado()"
+/>

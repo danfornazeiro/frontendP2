@@ -1,0 +1,34 @@
+<article class="product-card" (click)="onView()">
+  <div class="product-media">
+    @if (product().imageUrl) {
+      <img
+        [ngSrc]="product().imageUrl!"
+        width="480"
+        height="520"
+        alt="Imagem de {{ product().nome }}"
+      />
+    } @else {
+      <div class="product-fallback">DROP</div>
+    }
+  </div>
+
+  <div class="product-info">
+    <p class="product-tag">drop</p>
+    <h3>{{ product().nome }}</h3>
+    <p class="product-description">{{ product().descricao }}</p>
+
+    <div class="product-meta">
+      <span class="price">{{ price() | currency: 'BRL' }}</span>
+      <span class="stock">{{ product().quantidade }} itens</span>
+    </div>
+
+    <button
+      type="button"
+      class="primary-btn"
+      (click)="onAdd(); $event.stopPropagation()"
+      [disabled]="product().quantidade <= 0"
+    >
+      Adicionar
+    </button>
+  </div>
+</article>

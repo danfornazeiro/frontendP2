@@ -1,0 +1,33 @@
+<section class="profile-shell">
+  <div class="profile-header">
+    <p class="eyebrow">perfil</p>
+    <h1>Conta</h1>
+  </div>
+
+  @if (user$ | async; as user) {
+    @if (!user) {
+      <p class="empty">Nenhum usuario identificado.</p>
+      <a class="primary-btn" routerLink="/login">Entrar</a>
+    } @else {
+      <div class="profile-card">
+        <div>
+          <p class="label">Nome</p>
+          <p>{{ user.nome }}</p>
+        </div>
+        <div>
+          <p class="label">Email</p>
+          <p>{{ user.email }}</p>
+        </div>
+        <div>
+          <p class="label">Telefone</p>
+          <p>{{ user.telefone }}</p>
+        </div>
+        <div>
+          <p class="label">Endereco</p>
+          <p>{{ user.logradouro }}</p>
+        </div>
+      </div>
+      <a class="ghost-btn" routerLink="/edit-profile">Editar perfil</a>
+    }
+  }
+</section>

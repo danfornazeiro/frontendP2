@@ -1,0 +1,26 @@
+<nav class="nav-shell">
+  <div class="nav-logo">
+    <a routerLink="/home" class="logo-wordmark">DROP CITY</a>
+    <span class="logo-tag">streetwear lab</span>
+  </div>
+
+  <div class="nav-links">
+    <a routerLink="/home" routerLinkActive="active">Home</a>
+    <a routerLink="/create-product" routerLinkActive="active">Drop</a>
+    <a routerLink="/orders" routerLinkActive="active">Pedidos</a>
+    <a routerLink="/profile" routerLinkActive="active">Perfil</a>
+  </div>
+
+  <div class="nav-actions">
+    <a routerLink="/cart" class="cart-pill">
+      <span>Cart</span>
+      <span class="cart-count">{{ cartCount() }}</span>
+    </a>
+
+    @if (userName()) {
+      <button type="button" class="ghost-btn" (click)="logout.emit()">Sair</button>
+    } @else {
+      <a routerLink="/login" class="ghost-btn">Entrar</a>
+    }
+  </div>
+</nav>

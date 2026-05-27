@@ -1,0 +1,6 @@
+<div class="app-shell">
+	<app-navbar [userName]="userName()" [cartCount]="cartCount()" (logout)="onLogout()" />
+	<main class="app-main">
+		<router-outlet />
+	</main>
+</div>

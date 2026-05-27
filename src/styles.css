@@ -1,0 +1,53 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+
+:root {
+	--bg-primary: #0a0a0a;
+	--bg-elevated: #121212;
+	--bg-contrast: #1a1a1a;
+	--text-primary: #f4f1e6;
+	--text-muted: #b9b1a4;
+	--stroke-muted: #2a2724;
+	--accent-glow: #e5c77a;
+	--font-display: 'Bebas Neue', sans-serif;
+	--font-body: 'Space Grotesk', sans-serif;
+}
+
+* {
+	box-sizing: border-box;
+}
+
+html,
+body {
+	min-height: 100%;
+}
+
+body {
+	margin: 0;
+	font-family: var(--font-body);
+	background: radial-gradient(circle at top, rgba(229, 199, 122, 0.12), transparent 45%),
+		radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.05), transparent 40%),
+		var(--bg-primary);
+	color: var(--text-primary);
+}
+
+img {
+	display: block;
+	max-width: 100%;
+}
+
+button,
+input,
+textarea {
+	font-family: inherit;
+}
+
+a {
+	color: inherit;
+}
+
+.eyebrow {
+	text-transform: uppercase;
+	letter-spacing: 0.4em;
+	font-size: 0.6rem;
+	color: var(--text-muted);
+}

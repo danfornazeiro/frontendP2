@@ -1,0 +1,42 @@
+<section class="home-shell">
+  <div class="hero">
+    <p class="eyebrow">drop de colecao</p>
+    <h1>Streetwear em alta rotacao</h1>
+    <p class="subtitle">
+      Nova vitrine conectada ao backend em tempo real. Explore a queda mais fresca da semana.
+    </p>
+  </div>
+
+  <div class="search-bar">
+    <input
+      type="text"
+      placeholder="Buscar por nome"
+      [formControl]="searchControl"
+      aria-label="Buscar produtos"
+    />
+  </div>
+
+  @if (message()) {
+    <p class="info-banner">{{ message() }}</p>
+  }
+
+  @if (loading()) {
+    <p class="loading">Carregando vitrine...</p>
+  }
+
+  <div class="product-grid">
+    @if (products$ | async; as products) {
+      @if (products.length === 0) {
+        <p class="empty">Nenhum produto encontrado.</p>
+      } @else {
+        @for (product of products; track trackProduct($index, product)) {
+          <app-product-card
+            [product]="product"
+            (view)="onView($event)"
+            (addToCart)="onAdd($event)"
+          />
+        }
+      }
+    }
+  </div>
+</section>

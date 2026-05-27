@@ -1,0 +1,46 @@
+<div class="fixed inset-0 z-50 flex items-center justify-center">
+  <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" (click)="fechar.emit()"></div>
+
+  <div class="relative bg-[#0f0e0c] border border-[#2a2720] p-10 w-full max-w-md z-10">
+    <button
+      (click)="fechar.emit()"
+      class="absolute top-5 right-6 text-[#6b6456] hover:text-[#e8d5a3] text-xs tracking-widest uppercase transition-colors duration-200"
+    >
+      fechar
+    </button>
+
+    <p class="text-[#6b6456] text-[9px] tracking-[0.25em] uppercase mb-2">detalhe</p>
+    <h2 class="text-[#f0e6cc] text-2xl font-light mb-6" style="font-family: 'Georgia', serif">
+      {{ produto.nome }}
+    </h2>
+
+    <div class="h-44 w-full mb-6"></div>
+
+    <div class="h-px w-full bg-[#1e1c18] mb-6"></div>
+
+    <p class="text-[#6b6456] text-sm mb-6 leading-relaxed">{{ produto.descricao }}</p>
+
+    <div class="flex flex-col gap-1 mb-8">
+      <span
+        *ngIf="produto.promo > produto.valor"
+        class="text-[#3a342c] text-xs line-through tracking-wide"
+      >
+        R$ {{ produto.valor }}
+      </span>
+      <span class="text-[#e8d5a3] text-3xl font-light" style="font-family: 'Georgia', serif">
+        R$ {{ produto.promo < produto.valor ? produto.promo : produto.valor }}
+      </span>
+      <span class="text-[#6b6456] text-[9px] tracking-[0.2em] uppercase mt-1">
+        Estoque: {{ produto.quantidade }}
+      </span>
+    </div>
+
+    <button
+      class="w-full border border-[#e8d5a3] text-[#e8d5a3] text-[10px] tracking-[0.2em] uppercase py-3 hover:bg-[#e8d5a3] hover:text-[#0f0e0c] active:scale-[0.98] transition-all duration-200 disabled:opacity-20 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-[#e8d5a3]"
+      [disabled]="produto.quantidade <= 0"
+      (click)="comprar.emit()"
+    >
+      {{ produto.quantidade <= 0 ? 'Sem estoque' : 'Comprar' }}
+    </button>
+  </div>
+</div>

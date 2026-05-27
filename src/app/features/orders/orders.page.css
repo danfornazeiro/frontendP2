@@ -1,0 +1,41 @@
+:host {
+  display: block;
+  padding: 2.5rem 2rem 4rem;
+}
+
+.orders-header h1 {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.orders-grid {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.order-card {
+  background: var(--bg-elevated);
+  border: 1px solid var(--stroke-muted);
+  border-radius: 16px;
+  padding: 1rem 1.2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.order-card button {
+  border: 1px solid var(--stroke-muted);
+  background: transparent;
+  color: var(--text-primary);
+  padding: 0.4rem 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-size: 0.55rem;
+  cursor: pointer;
+}
+
+.empty {
+  color: var(--text-muted);
+}

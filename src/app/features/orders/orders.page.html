@@ -1,0 +1,22 @@
+<section class="orders-shell">
+  <div class="orders-header">
+    <p class="eyebrow">historico</p>
+    <h1>Pedidos</h1>
+  </div>
+
+  @if (orders$ | async; as orders) {
+    @if (orders.length === 0) {
+      <p class="empty">Nenhum pedido criado ainda.</p>
+    } @else {
+      <div class="orders-grid">
+        @for (order of orders; track order.id) {
+          <div class="order-card">
+            <p>Pedido #{{ order.id }}</p>
+            <span>Carrinho: {{ order.carrinhoId }}</span>
+            <button type="button" (click)="cancel(order.id)">Cancelar</button>
+          </div>
+        }
+      </div>
+    }
+  }
+</section>
