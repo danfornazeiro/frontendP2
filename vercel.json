@@ -1,0 +1,12 @@
+{
+  "rewrites": [
+    {
+      "source": "/dropcity/:path*",
+      "destination": "http://177.153.39.4:8080/dropcity/:path*"
+    },
+    {
+      "source": "/:path*",
+      "destination": "/index.html"
+    }
+  ]
+}
