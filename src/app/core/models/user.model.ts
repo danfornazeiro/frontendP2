@@ -1,3 +1,5 @@
+import { Order } from './order.model';
+
 export interface UserProfile {
   id?: number;
   codigo?: number;
@@ -10,4 +12,5 @@ export interface UserProfile {
     id: string;
     produtos?: unknown[];
   };
+  pedido?: Order[];
 }

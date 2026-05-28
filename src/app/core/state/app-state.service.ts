@@ -96,6 +96,7 @@ export class AppStateService {
           return this.userService.getById(id).pipe(
             tap((fullUser) => {
               this.syncCartIdFromUser(fullUser, true);
+              this.syncOrdersFromUser(fullUser);
               this.storeUserSnapshot(fullUser);
               this.userSubject.next(fullUser);
             })
@@ -103,6 +104,7 @@ export class AppStateService {
         }
 
         this.syncCartIdFromUser(user, true);
+        this.syncOrdersFromUser(user);
         this.storeUserSnapshot(user);
         this.userSubject.next(user);
         return of(user);
@@ -114,6 +116,7 @@ export class AppStateService {
     const storedId = localStorage.getItem('clientId');
     if (!storedId) {
       this.userSubject.next(null);
+      this.ordersSubject.next([]);
       return of(null);
     }
 
@@ -121,13 +124,16 @@ export class AppStateService {
     if (cached) {
       this.userSubject.next(cached);
       this.syncCartIdFromUser(cached, true);
+      this.syncOrdersFromUser(cached);
     } else {
       this.syncCartIdFromUser(null, true);
+      this.ordersSubject.next([]);
     }
 
     return this.userService.getById(Number(storedId)).pipe(
       tap((user) => {
         this.syncCartIdFromUser(user, true);
+        this.syncOrdersFromUser(user);
         this.storeUserSnapshot(user);
         this.userSubject.next(user);
       }),
@@ -141,6 +147,7 @@ export class AppStateService {
     localStorage.removeItem('userSnapshot');
     this.userSubject.next(null);
     this.cartSubject.next(null);
+    this.ordersSubject.next([]);
   }
 
   getClientId(): number | null {
@@ -203,6 +210,7 @@ export class AppStateService {
           return this.userService.getById(id).pipe(
             tap((fullUser) => {
               this.syncCartIdFromUser(fullUser, true);
+              this.syncOrdersFromUser(fullUser);
               this.storeUserSnapshot(fullUser);
               this.userSubject.next(fullUser);
             })
@@ -210,6 +218,7 @@ export class AppStateService {
         }
 
         this.syncCartIdFromUser(created, true);
+        this.syncOrdersFromUser(created);
         this.storeUserSnapshot(created);
         this.userSubject.next(created);
         return of(created);
@@ -256,9 +265,14 @@ export class AppStateService {
   createOrder(carrinhoId: string): Observable<Order> {
     return this.orderService.create(carrinhoId).pipe(
       tap((order) => {
-        this.ordersSubject.next([...this.ordersSubject.value, order]);
+        this.ordersSubject.next([...this.ordersSubject.value, this.normalizeOrder(order)]);
       })
     );
+  }
+
+  private syncOrdersFromUser(user: UserProfile | null): void {
+    const orders = user?.pedido ?? [];
+    this.ordersSubject.next(orders.map((order) => this.normalizeOrder(order)));
   }
 
   private syncCartIdFromUser(user: UserProfile | null, force: boolean): void {
@@ -313,6 +327,19 @@ export class AppStateService {
         this.ordersSubject.next(next);
       })
     );
+  }
+
+  private normalizeOrder(order: Order): Order {
+    const carrinhoId =
+      typeof order.carrinhoId === 'string' || typeof order.carrinhoId === 'number'
+        ? order.carrinhoId
+        : order.carrinho?.id ?? '';
+
+    return {
+      ...order,
+      carrinhoId,
+      carrinho: order.carrinho ?? (typeof carrinhoId === 'string' ? { id: carrinhoId } : undefined),
+    };
   }
 
   private resolveProductId(product?: Product | null): number {
