@@ -4,12 +4,16 @@ import { combineLatest, map } from 'rxjs';
 
 import { Cart } from '../../core/models/cart.model';
 import { Product } from '../../core/models/product.model';
+import { getProductPricing } from '../../core/models/product-pricing';
 import { AppStateService } from '../../core/state/app-state.service';
 
 interface CartItemView {
   product: Product;
   quantity: number;
   lineTotal: number;
+  unitPrice: number;
+  originalPrice: number;
+  hasDiscount: boolean;
 }
 
 interface CartView {
@@ -86,13 +90,21 @@ export class CartPage implements OnInit {
         return;
       }
 
-      const price = this.resolvePrice(product);
+      const pricing = getProductPricing(product);
+      const price = pricing.finalPrice;
       const current = itemsMap.get(id);
       if (current) {
         current.quantity += 1;
         current.lineTotal = current.quantity * price;
       } else {
-        itemsMap.set(id, { product, quantity: 1, lineTotal: price });
+        itemsMap.set(id, {
+          product,
+          quantity: 1,
+          lineTotal: price,
+          unitPrice: pricing.finalPrice,
+          originalPrice: pricing.originalPrice,
+          hasDiscount: pricing.hasDiscount,
+        });
       }
     });
 
@@ -107,13 +119,21 @@ export class CartPage implements OnInit {
           return;
         }
 
-        const price = this.resolvePrice(entry);
+        const pricing = getProductPricing(entry);
+        const price = pricing.finalPrice;
         const current = itemsMap.get(id);
         if (current) {
           current.quantity += 1;
           current.lineTotal = current.quantity * price;
         } else {
-          itemsMap.set(id, { product: entry, quantity: 1, lineTotal: price });
+          itemsMap.set(id, {
+            product: entry,
+            quantity: 1,
+            lineTotal: price,
+            unitPrice: pricing.finalPrice,
+            originalPrice: pricing.originalPrice,
+            hasDiscount: pricing.hasDiscount,
+          });
         }
       });
     }
@@ -123,10 +143,6 @@ export class CartPage implements OnInit {
     const count = items.reduce((sum, item) => sum + item.quantity, 0);
 
     return { items, total, count };
-  }
-
-  private resolvePrice(product: Product): number {
-    return product.promo > 0 && product.promo < product.valor ? product.promo : product.valor;
   }
 
   private resolveProductId(product: Product): number {

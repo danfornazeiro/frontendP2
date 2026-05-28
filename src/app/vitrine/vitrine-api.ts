@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 
 import { DetalheProduto } from '../detalhe-produto/detalhe-produto';
+import { getProductPricing } from '../core/models/product-pricing';
 import { Produto } from '../model/produto/produto';
 import { ProdutoService } from '../service/produto.service';
 
@@ -82,7 +83,7 @@ export class VitrineApi implements OnInit {
     });
   }
 
-  getPreco(produto: Produto): number {
-    return produto.promo > 0 && produto.promo < produto.valor ? produto.promo : produto.valor;
+  getPricing(produto: Produto) {
+    return getProductPricing(produto);
   }
 }

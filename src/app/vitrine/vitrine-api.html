@@ -50,6 +50,7 @@
       *ngFor="let obj of listaProdutos"
       (click)="abrirDetalhe(obj)"
     >
+      @let pricing = getPricing(obj);
       <p class="text-[#6b6456] text-[9px] tracking-[0.2em] uppercase mb-2">produto</p>
       <h4
         class="font-[family-name:var(--font-display)] mb-6 text-center text-base font-light tracking-wide text-[#f0e6cc]"
@@ -70,13 +71,12 @@
       </p>
 
       <div class="flex flex-col items-center gap-1 mb-6">
-        <span
-          *ngIf="obj.promo > obj.valor"
-          class="text-[#3a342c] text-xs line-through tracking-wide"
-          >R$ {{ obj.valor }}</span
-        >
+        @if (pricing.hasDiscount) {
+          <span class="text-[#3a342c] text-xs line-through tracking-wide">R$ {{ pricing.originalPrice }}</span>
+          <span class="text-[10px] uppercase tracking-[0.2em] text-[#e8d5a3]">promo</span>
+        }
         <span class="font-[family-name:var(--font-display)] text-2xl font-light text-[#e8d5a3]">
-          R$ {{ getPreco(obj) }}
+          R$ {{ pricing.finalPrice }}
         </span>
       </div>
 

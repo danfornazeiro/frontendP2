@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, input, output } from '@an
 import { CurrencyPipe, NgOptimizedImage } from '@angular/common';
 
 import { Product } from '../../../core/models/product.model';
+import { getProductPricing } from '../../../core/models/product-pricing';
 
 @Component({
   selector: 'app-product-card',
@@ -15,10 +16,7 @@ export class ProductCardComponent {
   view = output<Product>();
   addToCart = output<Product>();
 
-  price = computed(() => {
-    const current = this.product();
-    return current.promo > 0 && current.promo < current.valor ? current.promo : current.valor;
-  });
+  priceInfo = computed(() => getProductPricing(this.product()));
 
   onView(): void {
     this.view.emit(this.product());

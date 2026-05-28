@@ -21,15 +21,17 @@
     <p class="text-[#6b6456] text-sm mb-6 leading-relaxed">{{ produto.descricao }}</p>
 
     <div class="flex flex-col gap-1 mb-8">
-      <span
-        *ngIf="produto.promo > produto.valor"
-        class="text-[#3a342c] text-xs line-through tracking-wide"
-      >
-        R$ {{ produto.valor }}
-      </span>
-      <span class="font-[family-name:var(--font-display)] text-3xl font-light text-[#e8d5a3]">
-        R$ {{ produto.promo < produto.valor ? produto.promo : produto.valor }}
-      </span>
+      @if (pricing; as price) {
+        @if (price.hasDiscount) {
+          <span class="text-[#3a342c] text-xs line-through tracking-wide">
+            R$ {{ price.originalPrice }}
+          </span>
+          <span class="text-[10px] uppercase tracking-[0.2em] text-[#e8d5a3]">promo</span>
+        }
+        <span class="font-[family-name:var(--font-display)] text-3xl font-light text-[#e8d5a3]">
+          R$ {{ price.finalPrice }}
+        </span>
+      }
       <span class="text-[#6b6456] text-[9px] tracking-[0.2em] uppercase mt-1">
         Estoque: {{ produto.quantidade }}
       </span>

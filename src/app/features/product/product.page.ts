@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { map, switchMap } from 'rxjs/operators';
 
 import { Product } from '../../core/models/product.model';
+import { getProductPricing } from '../../core/models/product-pricing';
 import { AppStateService } from '../../core/state/app-state.service';
 
 @Component({
@@ -26,6 +27,10 @@ export class ProductPage implements OnInit {
         map((products) => products.find((product) => this.resolveProductId(product) === id) ?? null)
       )
     )
+  );
+
+  readonly productView$ = this.product$.pipe(
+    map((product) => (product ? { product, pricing: getProductPricing(product) } : null))
   );
 
   ngOnInit(): void {

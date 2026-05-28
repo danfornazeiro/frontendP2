@@ -3,27 +3,33 @@
 		<p class="rounded-xl border border-[#e5c77a] px-4 py-3 text-[0.65rem] uppercase tracking-[0.2em] text-[#e5c77a]">{{ message() }}</p>
 	}
 
-	@if (product$ | async; as product) {
-		@if (!product) {
+	@if (productView$ | async; as view) {
+		@if (!view) {
 			<p class="text-sm text-[#b9b1a4]">Produto nao encontrado.</p>
 		} @else {
 			<div class="grid items-center gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
 				<div class="grid min-h-[320px] place-items-center overflow-hidden rounded-3xl border border-[#2a2724] bg-[#121212]">
-					@if (product.imageUrl) {
-						<img [ngSrc]="product.imageUrl" width="640" height="720" alt="{{ product.nome }}" class="h-full w-full object-cover" />
+					@if (view.product.imageUrl) {
+						<img [ngSrc]="view.product.imageUrl" width="640" height="720" alt="{{ view.product.nome }}" class="h-full w-full object-cover" />
 					} @else {
 						<div class="font-[family-name:var(--font-display)] text-3xl tracking-[0.4em] text-[#e5c77a]">DROP</div>
 					}
 				</div>
 				<div class="grid gap-5">
 					<p class="text-[0.6rem] uppercase tracking-[0.5em] text-[#b9b1a4]">street drop</p>
-					<h1 class="font-[family-name:var(--font-display)] text-4xl uppercase tracking-[0.1em] text-[#f4f1e6]">{{ product.nome }}</h1>
-					<p class="text-[#b9b1a4]">{{ product.descricao }}</p>
+					<h1 class="font-[family-name:var(--font-display)] text-4xl uppercase tracking-[0.1em] text-[#f4f1e6]">{{ view.product.nome }}</h1>
+					<p class="text-[#b9b1a4]">{{ view.product.descricao }}</p>
 					<div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-6">
-						<span class="font-[family-name:var(--font-display)] text-3xl text-[#f4f1e6]">{{ (product.promo > 0 ? product.promo : product.valor) | currency: 'BRL' }}</span>
-						<span class="text-[0.6rem] uppercase tracking-[0.2em] text-[#b9b1a4]">{{ product.quantidade }} em estoque</span>
+						<div class="grid gap-1">
+							@if (view.pricing.hasDiscount) {
+								<span class="text-[0.65rem] uppercase tracking-[0.2em] text-[#e5c77a]">promo</span>
+								<span class="text-sm text-[#8d8577] line-through">{{ view.pricing.originalPrice | currency: 'BRL' }}</span>
+							}
+							<span class="font-[family-name:var(--font-display)] text-3xl text-[#e5c77a]">{{ view.pricing.finalPrice | currency: 'BRL' }}</span>
+						</div>
+						<span class="text-[0.6rem] uppercase tracking-[0.2em] text-[#b9b1a4]">{{ view.product.quantidade }} em estoque</span>
 					</div>
-					<button type="button" class="w-fit rounded-xl border border-[#e5c77a] bg-[#e5c77a] px-5 py-3 text-[0.65rem] uppercase tracking-[0.25em] text-[#0a0a0a] transition hover:opacity-90" (click)="onAdd(product)">
+					<button type="button" class="w-fit rounded-xl border border-[#e5c77a] bg-[#e5c77a] px-5 py-3 text-[0.65rem] uppercase tracking-[0.25em] text-[#0a0a0a] transition hover:opacity-90" (click)="onAdd(view.product)">
 						Adicionar ao carrinho
 					</button>
 				</div>
