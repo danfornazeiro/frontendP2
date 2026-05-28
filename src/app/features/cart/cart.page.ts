@@ -79,13 +79,6 @@ export class CartPage implements OnInit {
         return;
       }
 
-      if (this.appState.hasOrderForCart(cartId)) {
-        this.message.set('Este carrinho ja possui um pedido.');
-        this.appState.clearCartLocal();
-        this.checkoutPending.set(false);
-        return;
-      }
-
       this.appState.createOrder(cartId).subscribe({
         next: () => {
           this.message.set('Pedido criado com sucesso.');
@@ -94,11 +87,6 @@ export class CartPage implements OnInit {
         error: (error) => {
           const message = this.resolveCheckoutError(error);
           this.message.set(message);
-
-          if (message === 'Este carrinho ja possui um pedido.') {
-            this.appState.markOrderCreatedForCart(cartId);
-            this.appState.clearCartLocal();
-          }
 
           this.checkoutPending.set(false);
         },
@@ -182,12 +170,6 @@ export class CartPage implements OnInit {
   }
 
   private resolveCheckoutError(error: unknown): string {
-    const errorText = JSON.stringify(error ?? {});
-
-    if (errorText.includes('duplicate key value violates unique constraint') || errorText.includes('carrinho_id')) {
-      return 'Este carrinho ja possui um pedido.';
-    }
-
     return 'Nao foi possivel finalizar o pedido.';
   }
 }

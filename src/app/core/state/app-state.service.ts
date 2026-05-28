@@ -13,7 +13,6 @@ import { UserService } from '../services/user.service';
 
 @Injectable({ providedIn: 'root' })
 export class AppStateService {
-  private readonly orderedCartStorageKey = 'orderedCartId';
   private readonly productService = inject(ProductService);
   private readonly userService = inject(UserService);
   private readonly cartService = inject(CartService);
@@ -140,7 +139,6 @@ export class AppStateService {
     localStorage.removeItem('clientId');
     localStorage.removeItem('cartId');
     localStorage.removeItem('userSnapshot');
-    localStorage.removeItem(this.orderedCartStorageKey);
     this.userSubject.next(null);
     this.cartSubject.next(null);
   }
@@ -255,20 +253,10 @@ export class AppStateService {
     this.cartSubject.next(null);
   }
 
-  hasOrderForCart(carrinhoId: string): boolean {
-    return localStorage.getItem(this.orderedCartStorageKey) === carrinhoId;
-  }
-
-  markOrderCreatedForCart(carrinhoId: string): void {
-    localStorage.setItem(this.orderedCartStorageKey, carrinhoId);
-  }
-
   createOrder(carrinhoId: string): Observable<Order> {
     return this.orderService.create(carrinhoId).pipe(
       tap((order) => {
         this.ordersSubject.next([...this.ordersSubject.value, order]);
-        this.markOrderCreatedForCart(carrinhoId);
-        this.cartSubject.next(null);
       })
     );
   }

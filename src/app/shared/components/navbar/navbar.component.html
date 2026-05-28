@@ -1,30 +1,57 @@
-<nav class="sticky top-0 z-20 bg-[rgba(10,10,10,0.9)] border-b border-[#2a2724] backdrop-blur-md px-4 py-5 sm:px-6 lg:px-8">
-  <div class="mx-auto flex w-full max-w-[1200px] items-center justify-between">
-    <div class="flex flex-col gap-1">
-      <a routerLink="/home" class="font-[family-name:var(--font-display)] text-[1.6rem] uppercase tracking-[0.12em] text-[#f4f1e6] no-underline">DROP CITY</a>
-      <span class="text-[0.6rem] uppercase tracking-[0.3em] text-[#b9b1a4]">streetwear lab</span>
+<nav class="sticky top-0 z-20 border-b border-[#2a2724] bg-[rgba(10,10,10,0.9)] backdrop-blur-md px-4 py-4 sm:px-6 lg:px-8">
+  <div class="mx-auto flex w-full max-w-[1200px] items-center justify-between gap-4">
+    <div class="flex min-w-0 flex-1 items-center gap-3">
+      <a routerLink="/home" class="min-w-0 font-[family-name:var(--font-display)] text-[1.5rem] uppercase tracking-[0.12em] text-[#f4f1e6] no-underline sm:text-[1.7rem]">DROP CITY</a>
+      <span class="hidden text-[0.6rem] uppercase tracking-[0.3em] text-[#b9b1a4] sm:block">streetwear lab</span>
     </div>
 
-    <div class="flex items-center gap-6">
-      <div class="hidden lg:flex lg:items-center lg:gap-6">
-        <a routerLink="/home" routerLinkActive="text-[#f4f1e6]" class="text-[0.75rem] uppercase tracking-[0.2em] text-[#b9b1a4] transition-colors hover:text-[#f4f1e6]">Home</a>
-        <a routerLink="/create-product" routerLinkActive="text-[#f4f1e6]" class="text-[0.75rem] uppercase tracking-[0.2em] text-[#b9b1a4] transition-colors hover:text-[#f4f1e6]">Drop</a>
-        <a routerLink="/orders" routerLinkActive="text-[#f4f1e6]" class="text-[0.75rem] uppercase tracking-[0.2em] text-[#b9b1a4] transition-colors hover:text-[#f4f1e6]">Pedidos</a>
-        <a routerLink="/profile" routerLinkActive="text-[#f4f1e6]" class="text-[0.75rem] uppercase tracking-[0.2em] text-[#b9b1a4] transition-colors hover:text-[#f4f1e6]">Perfil</a>
-      </div>
+    <div class="hidden items-center gap-3 md:flex lg:gap-6">
+      <a routerLink="/home" routerLinkActive="text-[#f4f1e6]" class="text-[0.75rem] uppercase tracking-[0.2em] text-[#b9b1a4] transition-colors hover:text-[#f4f1e6]">Home</a>
+      <a routerLink="/create-product" routerLinkActive="text-[#f4f1e6]" class="text-[0.75rem] uppercase tracking-[0.2em] text-[#b9b1a4] transition-colors hover:text-[#f4f1e6]">Drop</a>
+      <a routerLink="/orders" routerLinkActive="text-[#f4f1e6]" class="text-[0.75rem] uppercase tracking-[0.2em] text-[#b9b1a4] transition-colors hover:text-[#f4f1e6]">Pedidos</a>
+      <a routerLink="/profile" routerLinkActive="text-[#f4f1e6]" class="text-[0.75rem] uppercase tracking-[0.2em] text-[#b9b1a4] transition-colors hover:text-[#f4f1e6]">Perfil</a>
+    </div>
 
-      <div class="flex items-center gap-3 sm:gap-4">
-        <a routerLink="/cart" class="inline-flex items-center gap-2 rounded-full border border-[#e5c77a] px-3 py-2 text-[0.65rem] uppercase tracking-[0.25em] text-[#f4f1e6] no-underline">
+    <div class="flex items-center gap-2 sm:gap-3">
+      <a routerLink="/cart" class="inline-flex items-center gap-2 rounded-full border border-[#e5c77a] px-3 py-2 text-[0.65rem] uppercase tracking-[0.25em] text-[#f4f1e6] no-underline">
+        <span class="hidden sm:inline">Cart</span>
+        <span class="rounded-full bg-[#e5c77a] px-2 py-0.5 text-[0.65rem] font-bold text-[#0a0a0a]">{{ cartCount() }}</span>
+      </a>
+
+      @if (userName()) {
+        <button type="button" class="hidden rounded-xl border border-[#2a2724] bg-transparent px-4 py-2 text-[0.65rem] uppercase tracking-[0.25em] text-[#f4f1e6] transition-colors hover:border-[#e5c77a] hover:text-[#e5c77a] sm:inline-flex" (click)="logout.emit()">Sair</button>
+      } @else {
+        <a routerLink="/login" class="hidden rounded-xl border border-[#2a2724] px-4 py-2 text-[0.65rem] uppercase tracking-[0.25em] text-[#f4f1e6] no-underline transition-colors hover:border-[#e5c77a] hover:text-[#e5c77a] sm:inline-flex">Entrar</a>
+      }
+
+      <button type="button" class="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-[#2a2724] text-[#f4f1e6] transition-colors hover:border-[#e5c77a] hover:text-[#e5c77a] md:hidden" (click)="toggleMenu()" [attr.aria-expanded]="menuOpen()" [attr.aria-label]="menuButtonLabel()">
+        <span class="sr-only">{{ menuButtonLabel() }}</span>
+        <span class="flex flex-col gap-1.5">
+          <span class="block h-0.5 w-5 rounded-full bg-current"></span>
+          <span class="block h-0.5 w-5 rounded-full bg-current"></span>
+          <span class="block h-0.5 w-5 rounded-full bg-current"></span>
+        </span>
+      </button>
+    </div>
+  </div>
+
+  @if (menuOpen()) {
+    <div class="mx-auto mt-4 flex w-full max-w-[1200px] flex-col gap-3 rounded-3xl border border-[#2a2724] bg-[#121212] p-4 shadow-[0_20px_60px_rgba(0,0,0,0.35)] md:hidden">
+      <a routerLink="/home" routerLinkActive="text-[#f4f1e6]" class="rounded-2xl border border-transparent px-3 py-3 text-sm uppercase tracking-[0.2em] text-[#b9b1a4] transition-colors hover:border-[#2a2724] hover:text-[#f4f1e6]" (click)="closeMenu()">Home</a>
+      <a routerLink="/create-product" routerLinkActive="text-[#f4f1e6]" class="rounded-2xl border border-transparent px-3 py-3 text-sm uppercase tracking-[0.2em] text-[#b9b1a4] transition-colors hover:border-[#2a2724] hover:text-[#f4f1e6]" (click)="closeMenu()">Drop</a>
+      <a routerLink="/orders" routerLinkActive="text-[#f4f1e6]" class="rounded-2xl border border-transparent px-3 py-3 text-sm uppercase tracking-[0.2em] text-[#b9b1a4] transition-colors hover:border-[#2a2724] hover:text-[#f4f1e6]" (click)="closeMenu()">Pedidos</a>
+      <a routerLink="/profile" routerLinkActive="text-[#f4f1e6]" class="rounded-2xl border border-transparent px-3 py-3 text-sm uppercase tracking-[0.2em] text-[#b9b1a4] transition-colors hover:border-[#2a2724] hover:text-[#f4f1e6]" (click)="closeMenu()">Perfil</a>
+      <div class="grid grid-cols-1 gap-3 pt-2 sm:grid-cols-2">
+        @if (userName()) {
+          <button type="button" class="rounded-xl border border-[#2a2724] px-4 py-3 text-[0.7rem] uppercase tracking-[0.25em] text-[#f4f1e6] transition-colors hover:border-[#e5c77a] hover:text-[#e5c77a]" (click)="logout.emit(); closeMenu()">Sair</button>
+        } @else {
+          <a routerLink="/login" class="rounded-xl border border-[#2a2724] px-4 py-3 text-center text-[0.7rem] uppercase tracking-[0.25em] text-[#f4f1e6] no-underline transition-colors hover:border-[#e5c77a] hover:text-[#e5c77a]" (click)="closeMenu()">Entrar</a>
+        }
+        <a routerLink="/cart" class="inline-flex items-center justify-center gap-2 rounded-xl border border-[#e5c77a] px-4 py-3 text-[0.7rem] uppercase tracking-[0.25em] text-[#f4f1e6] no-underline transition-colors hover:bg-[#e5c77a] hover:text-[#0a0a0a]" (click)="closeMenu()">
           <span>Cart</span>
           <span class="rounded-full bg-[#e5c77a] px-2 py-0.5 text-[0.65rem] font-bold text-[#0a0a0a]">{{ cartCount() }}</span>
         </a>
-
-        @if (userName()) {
-          <button type="button" class="rounded-xl border border-[#2a2724] bg-transparent px-4 py-2 text-[0.65rem] uppercase tracking-[0.25em] text-[#f4f1e6] transition-colors hover:border-[#e5c77a] hover:text-[#e5c77a]" (click)="logout.emit()">Sair</button>
-        } @else {
-          <a routerLink="/login" class="rounded-xl border border-[#2a2724] px-4 py-2 text-[0.65rem] uppercase tracking-[0.25em] text-[#f4f1e6] no-underline transition-colors hover:border-[#e5c77a] hover:text-[#e5c77a]">Entrar</a>
-        }
       </div>
     </div>
-  </div>
+  }
 </nav>
