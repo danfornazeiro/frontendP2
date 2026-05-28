@@ -1,6 +1,6 @@
 import { AsyncPipe, CurrencyPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, OnInit, inject, signal } from '@angular/core';
-import { combineLatest, map } from 'rxjs';
+import { combineLatest, map, take } from 'rxjs';
 
 import { Cart } from '../../core/models/cart.model';
 import { Product } from '../../core/models/product.model';
@@ -18,6 +18,8 @@ interface CartItemView {
 
 interface CartView {
   items: CartItemView[];
+  totalOriginal: number;
+  savings: number;
   total: number;
   count: number;
 }
@@ -33,6 +35,7 @@ export class CartPage implements OnInit {
   private readonly appState = inject(AppStateService);
 
   readonly message = signal<string | null>(null);
+  readonly checkoutPending = signal(false);
 
   readonly cartView$ = combineLatest([this.appState.cart$, this.appState.products$]).pipe(
     map(([cart, products]) => this.buildCartView(cart, products))
@@ -63,15 +66,42 @@ export class CartPage implements OnInit {
   }
 
   checkout(): void {
-    this.appState.ensureCartId$().subscribe((cartId) => {
+    if (this.checkoutPending()) {
+      return;
+    }
+
+    this.checkoutPending.set(true);
+
+    this.appState.ensureCartId$().pipe(take(1)).subscribe((cartId) => {
       if (!cartId) {
         this.message.set('Carrinho nao encontrado.');
+        this.checkoutPending.set(false);
+        return;
+      }
+
+      if (this.appState.hasOrderForCart(cartId)) {
+        this.message.set('Este carrinho ja possui um pedido.');
+        this.appState.clearCartLocal();
+        this.checkoutPending.set(false);
         return;
       }
 
       this.appState.createOrder(cartId).subscribe({
-        next: () => this.message.set('Pedido criado com sucesso.'),
-        error: () => this.message.set('Nao foi possivel finalizar o pedido.'),
+        next: () => {
+          this.message.set('Pedido criado com sucesso.');
+          this.checkoutPending.set(false);
+        },
+        error: (error) => {
+          const message = this.resolveCheckoutError(error);
+          this.message.set(message);
+
+          if (message === 'Este carrinho ja possui um pedido.') {
+            this.appState.markOrderCreatedForCart(cartId);
+            this.appState.clearCartLocal();
+          }
+
+          this.checkoutPending.set(false);
+        },
       });
     });
   }
@@ -140,12 +170,24 @@ export class CartPage implements OnInit {
 
     const items = Array.from(itemsMap.values());
     const total = items.reduce((sum, item) => sum + item.lineTotal, 0);
+    const totalOriginal = items.reduce((sum, item) => sum + item.originalPrice * item.quantity, 0);
+    const savings = Math.max(totalOriginal - total, 0);
     const count = items.reduce((sum, item) => sum + item.quantity, 0);
 
-    return { items, total, count };
+    return { items, totalOriginal, savings, total, count };
   }
 
   private resolveProductId(product: Product): number {
     return product.id ?? product.codigo ?? 0;
+  }
+
+  private resolveCheckoutError(error: unknown): string {
+    const errorText = JSON.stringify(error ?? {});
+
+    if (errorText.includes('duplicate key value violates unique constraint') || errorText.includes('carrinho_id')) {
+      return 'Este carrinho ja possui um pedido.';
+    }
+
+    return 'Nao foi possivel finalizar o pedido.';
   }
 }

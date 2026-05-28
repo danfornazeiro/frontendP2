@@ -16,7 +16,7 @@
 			@let pricing = priceInfo();
 			<div class="grid gap-1">
 				@if (pricing.hasDiscount) {
-					<span class="text-[0.55rem] uppercase tracking-[0.2em] text-[#e5c77a]">promo</span>
+					<span class="text-[0.55rem] uppercase tracking-[0.2em] text-[#e5c77a]">desconto</span>
 					<span class="text-xs text-[#8d8577] line-through">{{ pricing.originalPrice | currency: 'BRL' }}</span>
 				}
 				<span class="font-[family-name:var(--font-display)] text-xl text-[#e5c77a]">{{ pricing.finalPrice | currency: 'BRL' }}</span>

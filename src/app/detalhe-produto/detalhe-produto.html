@@ -26,7 +26,7 @@
           <span class="text-[#3a342c] text-xs line-through tracking-wide">
             R$ {{ price.originalPrice }}
           </span>
-          <span class="text-[10px] uppercase tracking-[0.2em] text-[#e8d5a3]">promo</span>
+          <span class="text-[10px] uppercase tracking-[0.2em] text-[#e8d5a3]">desconto</span>
         }
         <span class="font-[family-name:var(--font-display)] text-3xl font-light text-[#e8d5a3]">
           R$ {{ price.finalPrice }}
@@ -35,6 +35,18 @@
       <span class="text-[#6b6456] text-[9px] tracking-[0.2em] uppercase mt-1">
         Estoque: {{ produto.quantidade }}
       </span>
+    </div>
+
+    <div class="grid gap-3 rounded-2xl border border-[#1e1c18] bg-[#121212] p-4 mb-6">
+      <p class="text-[0.55rem] uppercase tracking-[0.35em] text-[#b9b1a4]">pagamento rápido</p>
+      <div class="flex flex-wrap gap-2 text-[0.55rem] uppercase tracking-[0.2em] text-[#e8d5a3]">
+        <span class="rounded-full border border-[#2a2724] px-3 py-1">Pix instantâneo</span>
+        <span class="rounded-full border border-[#2a2724] px-3 py-1">Cartão sem juros</span>
+        <span class="rounded-full border border-[#2a2724] px-3 py-1">Checkout seguro</span>
+      </div>
+      <p class="text-xs leading-5 text-[#8d8577]">
+        Visual de pagamento apenas no front, para dar sensação de compra pronta sem alterar o fluxo real.
+      </p>
     </div>
 
     <button
