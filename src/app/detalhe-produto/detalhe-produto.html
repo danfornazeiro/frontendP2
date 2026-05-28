@@ -10,7 +10,7 @@
     </button>
 
     <p class="text-[#6b6456] text-[9px] tracking-[0.25em] uppercase mb-2">detalhe</p>
-    <h2 class="text-[#f0e6cc] text-2xl font-light mb-6" style="font-family: 'Georgia', serif">
+    <h2 class="mb-6 font-[family-name:var(--font-display)] text-2xl font-light text-[#f0e6cc]">
       {{ produto.nome }}
     </h2>
 
@@ -27,7 +27,7 @@
       >
         R$ {{ produto.valor }}
       </span>
-      <span class="text-[#e8d5a3] text-3xl font-light" style="font-family: 'Georgia', serif">
+      <span class="font-[family-name:var(--font-display)] text-3xl font-light text-[#e8d5a3]">
         R$ {{ produto.promo < produto.valor ? produto.promo : produto.valor }}
       </span>
       <span class="text-[#6b6456] text-[9px] tracking-[0.2em] uppercase mt-1">

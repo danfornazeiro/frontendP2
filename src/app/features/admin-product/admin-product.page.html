@@ -1,68 +1,68 @@
-<section class="admin-shell">
-  <div class="header">
-    <p class="eyebrow">gestao</p>
-    <h1>Produtos</h1>
-  </div>
+<section class="grid gap-8 px-4 py-10 sm:px-6 lg:px-8">
+	<div class="grid gap-2">
+		<p class="text-[0.6rem] uppercase tracking-[0.5em] text-[#b9b1a4]">gestao</p>
+		<h1 class="font-[family-name:var(--font-display)] text-4xl uppercase tracking-[0.1em] text-[#f4f1e6]">Produtos</h1>
+	</div>
 
-  @if (message()) {
-    <p class="info-banner">{{ message() }}</p>
-  }
+	@if (message()) {
+		<p class="rounded-xl border border-[#e5c77a] px-4 py-3 text-[0.65rem] uppercase tracking-[0.2em] text-[#e5c77a]">{{ message() }}</p>
+	}
 
-  <div class="admin-grid">
-    <div class="panel">
-      <h2>{{ selectedId() ? 'Editar produto' : 'Novo produto' }}</h2>
-      <form [formGroup]="form" class="form-grid">
-        <label>
-          <span>Nome</span>
-          <input type="text" formControlName="nome" />
-        </label>
-        <label>
-          <span>Imagem</span>
-          <input type="text" formControlName="imageUrl" placeholder="https://" />
-        </label>
-        <label>
-          <span>Descricao</span>
-          <textarea rows="3" formControlName="descricao"></textarea>
-        </label>
-        <div class="row">
-          <label>
-            <span>Valor</span>
-            <input type="number" formControlName="valor" />
-          </label>
-          <label>
-            <span>Promo</span>
-            <input type="number" formControlName="promo" />
-          </label>
-        </div>
-        <label>
-          <span>Quantidade</span>
-          <input type="number" formControlName="quantidade" />
-        </label>
-      </form>
-      <div class="actions">
-        <button type="button" class="primary-btn" (click)="submit()">Salvar</button>
-        <button type="button" class="ghost-btn" (click)="resetForm()">Limpar</button>
-      </div>
-    </div>
+	<div class="grid gap-8 xl:grid-cols-[420px_minmax(0,1fr)]">
+		<div class="grid gap-4 rounded-2xl border border-[#2a2724] bg-[#121212] p-6">
+			<h2 class="font-[family-name:var(--font-display)] text-2xl uppercase tracking-[0.08em] text-[#f4f1e6]">{{ selectedId() ? 'Editar produto' : 'Novo produto' }}</h2>
+			<form [formGroup]="form" class="grid gap-4">
+				<label class="grid gap-2 text-[0.75rem] uppercase tracking-[0.2em] text-[#b9b1a4]">
+					<span>Nome</span>
+					<input type="text" formControlName="nome" class="rounded-xl border border-[#2a2724] bg-transparent px-4 py-3 text-[#f4f1e6] outline-none transition focus:border-[#e5c77a]" />
+				</label>
+				<label class="grid gap-2 text-[0.75rem] uppercase tracking-[0.2em] text-[#b9b1a4]">
+					<span>Imagem</span>
+					<input type="text" formControlName="imageUrl" placeholder="https://" class="rounded-xl border border-[#2a2724] bg-transparent px-4 py-3 text-[#f4f1e6] outline-none transition focus:border-[#e5c77a]" />
+				</label>
+				<label class="grid gap-2 text-[0.75rem] uppercase tracking-[0.2em] text-[#b9b1a4]">
+					<span>Descricao</span>
+					<textarea rows="3" formControlName="descricao" class="rounded-xl border border-[#2a2724] bg-transparent px-4 py-3 text-[#f4f1e6] outline-none transition focus:border-[#e5c77a]"></textarea>
+				</label>
+				<div class="grid gap-4 sm:grid-cols-2">
+					<label class="grid gap-2 text-[0.75rem] uppercase tracking-[0.2em] text-[#b9b1a4]">
+						<span>Valor</span>
+						<input type="number" formControlName="valor" class="rounded-xl border border-[#2a2724] bg-transparent px-4 py-3 text-[#f4f1e6] outline-none transition focus:border-[#e5c77a]" />
+					</label>
+					<label class="grid gap-2 text-[0.75rem] uppercase tracking-[0.2em] text-[#b9b1a4]">
+						<span>Promo</span>
+						<input type="number" formControlName="promo" class="rounded-xl border border-[#2a2724] bg-transparent px-4 py-3 text-[#f4f1e6] outline-none transition focus:border-[#e5c77a]" />
+					</label>
+				</div>
+				<label class="grid gap-2 text-[0.75rem] uppercase tracking-[0.2em] text-[#b9b1a4]">
+					<span>Quantidade</span>
+					<input type="number" formControlName="quantidade" class="rounded-xl border border-[#2a2724] bg-transparent px-4 py-3 text-[#f4f1e6] outline-none transition focus:border-[#e5c77a]" />
+				</label>
+			</form>
+			<div class="flex flex-wrap gap-3">
+				<button type="button" class="rounded-xl border border-[#e5c77a] bg-[#e5c77a] px-5 py-3 text-[0.65rem] uppercase tracking-[0.25em] text-[#0a0a0a] transition hover:opacity-90" (click)="submit()">Salvar</button>
+				<button type="button" class="rounded-xl border border-[#2a2724] px-5 py-3 text-[0.65rem] uppercase tracking-[0.25em] text-[#f4f1e6] transition hover:border-[#e5c77a] hover:text-[#e5c77a]" (click)="resetForm()">Limpar</button>
+			</div>
+		</div>
 
-    <div class="panel">
-      <h2>Inventario</h2>
-      @if (products$ | async; as products) {
-        <div class="list">
-          @for (product of products; track trackProduct($index, product)) {
-            <div class="list-item">
-              <div>
-                <p class="item-title">{{ product.nome }}</p>
-                <p class="item-sub">{{ product.quantidade }} itens</p>
-              </div>
-              <div class="actions">
-                <button type="button" (click)="edit(product)">Editar</button>
-                <button type="button" (click)="remove(product)">Excluir</button>
-              </div>
-            </div>
-          }
-        </div>
-      }
-    </div>
-  </div>
+		<div class="grid gap-4 rounded-2xl border border-[#2a2724] bg-[#121212] p-6">
+			<h2 class="font-[family-name:var(--font-display)] text-2xl uppercase tracking-[0.08em] text-[#f4f1e6]">Inventario</h2>
+			@if (products$ | async; as products) {
+				<div class="grid gap-3">
+					@for (product of products; track trackProduct($index, product)) {
+						<div class="flex flex-col gap-3 rounded-xl border border-[#2a2724] p-4 sm:flex-row sm:items-center sm:justify-between">
+							<div class="grid gap-1">
+								<p class="font-[family-name:var(--font-display)] text-xl uppercase tracking-[0.08em] text-[#f4f1e6]">{{ product.nome }}</p>
+								<p class="text-xs text-[#b9b1a4]">{{ product.quantidade }} itens</p>
+							</div>
+							<div class="flex flex-wrap gap-2">
+								<button type="button" class="rounded-lg border border-[#2a2724] px-3 py-2 text-[0.55rem] uppercase tracking-[0.2em] text-[#f4f1e6] transition hover:border-[#e5c77a] hover:text-[#e5c77a]" (click)="edit(product)">Editar</button>
+								<button type="button" class="rounded-lg border border-[#5c302c] px-3 py-2 text-[0.55rem] uppercase tracking-[0.2em] text-[#ff9f94] transition hover:bg-[#5c302c] hover:text-[#fff1ef]" (click)="remove(product)">Excluir</button>
+							</div>
+						</div>
+					}
+				</div>
+			}
+		</div>
+	</div>
 </section>

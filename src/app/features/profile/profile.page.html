@@ -1,33 +1,33 @@
-<section class="profile-shell">
-  <div class="profile-header">
-    <p class="eyebrow">perfil</p>
-    <h1>Conta</h1>
-  </div>
+<section class="grid gap-8 px-4 py-10 sm:px-6 lg:px-8">
+	<div class="grid gap-2">
+		<p class="text-[0.6rem] uppercase tracking-[0.5em] text-[#b9b1a4]">perfil</p>
+		<h1 class="font-[family-name:var(--font-display)] text-4xl uppercase tracking-[0.1em] text-[#f4f1e6]">Conta</h1>
+	</div>
 
-  @if (user$ | async; as user) {
-    @if (!user) {
-      <p class="empty">Nenhum usuario identificado.</p>
-      <a class="primary-btn" routerLink="/login">Entrar</a>
-    } @else {
-      <div class="profile-card">
-        <div>
-          <p class="label">Nome</p>
-          <p>{{ user.nome }}</p>
-        </div>
-        <div>
-          <p class="label">Email</p>
-          <p>{{ user.email }}</p>
-        </div>
-        <div>
-          <p class="label">Telefone</p>
-          <p>{{ user.telefone }}</p>
-        </div>
-        <div>
-          <p class="label">Endereco</p>
-          <p>{{ user.logradouro }}</p>
-        </div>
-      </div>
-      <a class="ghost-btn" routerLink="/edit-profile">Editar perfil</a>
-    }
-  }
+	@if (user$ | async; as user) {
+		@if (!user) {
+			<p class="text-sm text-[#b9b1a4]">Nenhum usuario identificado.</p>
+			<a class="inline-flex w-fit rounded-xl border border-[#e5c77a] bg-[#e5c77a] px-5 py-3 text-[0.65rem] uppercase tracking-[0.25em] text-[#0a0a0a] no-underline" routerLink="/login">Entrar</a>
+		} @else {
+			<div class="grid gap-4 rounded-2xl border border-[#2a2724] bg-[#121212] p-6">
+				<div class="grid gap-1">
+					<p class="text-[0.6rem] uppercase tracking-[0.2em] text-[#b9b1a4]">Nome</p>
+					<p class="text-[#f4f1e6]">{{ user.nome }}</p>
+				</div>
+				<div class="grid gap-1">
+					<p class="text-[0.6rem] uppercase tracking-[0.2em] text-[#b9b1a4]">Email</p>
+					<p class="text-[#f4f1e6]">{{ user.email }}</p>
+				</div>
+				<div class="grid gap-1">
+					<p class="text-[0.6rem] uppercase tracking-[0.2em] text-[#b9b1a4]">Telefone</p>
+					<p class="text-[#f4f1e6]">{{ user.telefone }}</p>
+				</div>
+				<div class="grid gap-1">
+					<p class="text-[0.6rem] uppercase tracking-[0.2em] text-[#b9b1a4]">Endereco</p>
+					<p class="text-[#f4f1e6]">{{ user.logradouro }}</p>
+				</div>
+			</div>
+			<a class="inline-flex w-fit rounded-xl border border-[#2a2724] px-5 py-3 text-[0.65rem] uppercase tracking-[0.25em] text-[#f4f1e6] no-underline transition hover:border-[#e5c77a] hover:text-[#e5c77a]" routerLink="/edit-profile">Editar perfil</a>
+		}
+	}
 </section>

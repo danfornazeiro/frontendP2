@@ -1,19 +1,21 @@
-<section class="orders-shell">
-  <div class="orders-header">
-    <p class="eyebrow">historico</p>
-    <h1>Pedidos</h1>
+<section class="grid gap-8 px-4 py-10 sm:px-6 lg:px-8">
+  <div class="grid gap-2">
+    <p class="text-[0.6rem] uppercase tracking-[0.5em] text-[#b9b1a4]">historico</p>
+    <h1 class="font-[family-name:var(--font-display)] text-4xl uppercase tracking-[0.1em] text-[#f4f1e6]">Pedidos</h1>
   </div>
 
   @if (orders$ | async; as orders) {
     @if (orders.length === 0) {
-      <p class="empty">Nenhum pedido criado ainda.</p>
+      <p class="text-sm text-[#b9b1a4]">Nenhum pedido criado ainda.</p>
     } @else {
-      <div class="orders-grid">
+      <div class="grid gap-4">
         @for (order of orders; track order.id) {
-          <div class="order-card">
-            <p>Pedido #{{ order.id }}</p>
-            <span>Carrinho: {{ order.carrinhoId }}</span>
-            <button type="button" (click)="cancel(order.id)">Cancelar</button>
+          <div class="flex flex-col gap-3 rounded-2xl border border-[#2a2724] bg-[#121212] p-4 sm:flex-row sm:items-center sm:justify-between">
+            <div class="grid gap-1">
+              <p class="font-[family-name:var(--font-display)] text-xl uppercase tracking-[0.08em] text-[#f4f1e6]">Pedido #{{ order.id }}</p>
+              <span class="text-xs text-[#b9b1a4]">Carrinho: {{ order.carrinhoId }}</span>
+            </div>
+            <button type="button" class="rounded-lg border border-[#2a2724] px-3 py-2 text-[0.55rem] uppercase tracking-[0.2em] text-[#f4f1e6] transition hover:border-[#e5c77a] hover:text-[#e5c77a]" (click)="cancel(order.id)">Cancelar</button>
           </div>
         }
       </div>

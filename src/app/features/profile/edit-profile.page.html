@@ -1,40 +1,40 @@
-<section class="edit-shell">
-  <div class="header">
-    <p class="eyebrow">editar</p>
-    <h1>Perfil</h1>
-  </div>
+<section class="grid gap-8 px-4 py-10 sm:px-6 lg:px-8">
+	<div class="grid gap-2">
+		<p class="text-[0.6rem] uppercase tracking-[0.5em] text-[#b9b1a4]">editar</p>
+		<h1 class="font-[family-name:var(--font-display)] text-4xl uppercase tracking-[0.1em] text-[#f4f1e6]">Perfil</h1>
+	</div>
 
-  @if (message()) {
-    <p class="info-banner">{{ message() }}</p>
-  }
+	@if (message()) {
+		<p class="rounded-xl border border-[#e5c77a] px-4 py-3 text-[0.65rem] uppercase tracking-[0.2em] text-[#e5c77a]">{{ message() }}</p>
+	}
 
-  <form [formGroup]="profileForm" class="form-grid">
-    <label>
-      <span>Nome</span>
-      <input type="text" formControlName="nome" />
-    </label>
-    <label>
-      <span>Email</span>
-      <input type="email" formControlName="email" />
-    </label>
-    <label>
-      <span>Telefone</span>
-      <input type="text" formControlName="telefone" />
-    </label>
-    <label>
-      <span>Endereco</span>
-      <input type="text" formControlName="logradouro" />
-    </label>
-  </form>
-  <button type="button" class="primary-btn" (click)="saveProfile()">Salvar</button>
+	<form [formGroup]="profileForm" class="grid gap-4 rounded-2xl border border-[#2a2724] bg-[#121212] p-6">
+		<label class="grid gap-2 text-[0.75rem] uppercase tracking-[0.2em] text-[#b9b1a4]">
+			<span>Nome</span>
+			<input type="text" formControlName="nome" class="rounded-xl border border-[#2a2724] bg-transparent px-4 py-3 text-[#f4f1e6] outline-none transition focus:border-[#e5c77a]" />
+		</label>
+		<label class="grid gap-2 text-[0.75rem] uppercase tracking-[0.2em] text-[#b9b1a4]">
+			<span>Email</span>
+			<input type="email" formControlName="email" class="rounded-xl border border-[#2a2724] bg-transparent px-4 py-3 text-[#f4f1e6] outline-none transition focus:border-[#e5c77a]" />
+		</label>
+		<label class="grid gap-2 text-[0.75rem] uppercase tracking-[0.2em] text-[#b9b1a4]">
+			<span>Telefone</span>
+			<input type="text" formControlName="telefone" class="rounded-xl border border-[#2a2724] bg-transparent px-4 py-3 text-[#f4f1e6] outline-none transition focus:border-[#e5c77a]" />
+		</label>
+		<label class="grid gap-2 text-[0.75rem] uppercase tracking-[0.2em] text-[#b9b1a4]">
+			<span>Endereco</span>
+			<input type="text" formControlName="logradouro" class="rounded-xl border border-[#2a2724] bg-transparent px-4 py-3 text-[#f4f1e6] outline-none transition focus:border-[#e5c77a]" />
+		</label>
+	</form>
+	<button type="button" class="w-fit rounded-xl border border-[#e5c77a] bg-[#e5c77a] px-5 py-3 text-[0.65rem] uppercase tracking-[0.25em] text-[#0a0a0a] transition hover:opacity-90" (click)="saveProfile()">Salvar</button>
 
-  <div class="divider"></div>
+	<div class="h-px bg-[#2a2724]"></div>
 
-  <form [formGroup]="passwordForm" class="form-grid">
-    <label>
-      <span>Nova senha</span>
-      <input type="password" formControlName="senha" />
-    </label>
-  </form>
-  <button type="button" class="ghost-btn" (click)="changePassword()">Alterar senha</button>
+	<form [formGroup]="passwordForm" class="grid gap-4 rounded-2xl border border-[#2a2724] bg-[#121212] p-6">
+		<label class="grid gap-2 text-[0.75rem] uppercase tracking-[0.2em] text-[#b9b1a4]">
+			<span>Nova senha</span>
+			<input type="password" formControlName="senha" class="rounded-xl border border-[#2a2724] bg-transparent px-4 py-3 text-[#f4f1e6] outline-none transition focus:border-[#e5c77a]" />
+		</label>
+	</form>
+	<button type="button" class="w-fit rounded-xl border border-[#2a2724] px-5 py-3 text-[0.65rem] uppercase tracking-[0.25em] text-[#f4f1e6] transition hover:border-[#e5c77a] hover:text-[#e5c77a]" (click)="changePassword()">Alterar senha</button>
 </section>

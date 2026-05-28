@@ -1,34 +1,29 @@
-<article class="product-card" (click)="onView()">
-  <div class="product-media">
-    @if (product().imageUrl) {
-      <img
-        [ngSrc]="product().imageUrl!"
-        width="480"
-        height="520"
-        alt="Imagem de {{ product().nome }}"
-      />
-    } @else {
-      <div class="product-fallback">DROP</div>
-    }
-  </div>
+<article class="group grid h-full cursor-pointer grid-rows-[1fr_auto] overflow-hidden rounded-[20px] border border-[#2a2724] bg-[#121212] transition duration-300 hover:-translate-y-1.5 hover:scale-[1.01] hover:border-[#e5c77a] hover:shadow-[0_20px_40px_rgba(0,0,0,0.6),0_0_24px_rgba(232,212,128,0.25)]" (click)="onView()">
+	<div class="relative grid min-h-[240px] place-items-center bg-[linear-gradient(160deg,#1a1a1a_0%,#0f0f0f_60%)]">
+		@if (product().imageUrl) {
+			<img [ngSrc]="product().imageUrl!" width="480" height="520" alt="Imagem de {{ product().nome }}" class="h-full w-full object-cover" />
+		} @else {
+			<div class="font-[family-name:var(--font-display)] text-2xl tracking-[0.4em] text-[#e5c77a]">DROP</div>
+		}
+	</div>
 
-  <div class="product-info">
-    <p class="product-tag">drop</p>
-    <h3>{{ product().nome }}</h3>
-    <p class="product-description">{{ product().descricao }}</p>
+	<div class="grid gap-4 p-6">
+		<p class="text-[0.55rem] uppercase tracking-[0.35em] text-[#b9b1a4]">drop</p>
+		<h3 class="m-0 font-[family-name:var(--font-display)] text-2xl uppercase tracking-[0.08em] text-[#f4f1e6]">{{ product().nome }}</h3>
+		<p class="min-h-[2.6rem] text-sm leading-5 text-[#b9b1a4]">{{ product().descricao }}</p>
 
-    <div class="product-meta">
-      <span class="price">{{ price() | currency: 'BRL' }}</span>
-      <span class="stock">{{ product().quantidade }} itens</span>
-    </div>
+		<div class="flex items-center justify-between gap-4">
+			<span class="font-[family-name:var(--font-display)] text-xl text-[#f4f1e6]">{{ price() | currency: 'BRL' }}</span>
+			<span class="text-[0.55rem] uppercase tracking-[0.2em] text-[#b9b1a4]">{{ product().quantidade }} itens</span>
+		</div>
 
-    <button
-      type="button"
-      class="primary-btn"
-      (click)="onAdd(); $event.stopPropagation()"
-      [disabled]="product().quantidade <= 0"
-    >
-      Adicionar
-    </button>
-  </div>
+		<button
+			type="button"
+			class="border border-[#e5c77a] bg-transparent p-3 text-[0.6rem] uppercase tracking-[0.25em] text-[#f4f1e6] transition duration-200 hover:bg-[#e5c77a] hover:text-[#0a0a0a] disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-transparent disabled:hover:text-[#f4f1e6]"
+			(click)="onAdd(); $event.stopPropagation()"
+			[disabled]="product().quantidade <= 0"
+		>
+			Adicionar
+		</button>
+	</div>
 </article>

@@ -1,35 +1,33 @@
-<section class="product-shell">
-  @if (message()) {
-    <p class="info-banner">{{ message() }}</p>
-  }
+<section class="grid gap-8 px-4 py-10 sm:px-6 lg:px-8">
+	@if (message()) {
+		<p class="rounded-xl border border-[#e5c77a] px-4 py-3 text-[0.65rem] uppercase tracking-[0.2em] text-[#e5c77a]">{{ message() }}</p>
+	}
 
-  @if (product$ | async; as product) {
-    @if (!product) {
-      <p class="empty">Produto nao encontrado.</p>
-    } @else {
-      <div class="product-layout">
-        <div class="product-image">
-          @if (product.imageUrl) {
-            <img [ngSrc]="product.imageUrl" width="640" height="720" alt="{{ product.nome }}" />
-          } @else {
-            <div class="image-fallback">DROP</div>
-          }
-        </div>
-        <div class="product-details">
-          <p class="eyebrow">street drop</p>
-          <h1>{{ product.nome }}</h1>
-          <p class="description">{{ product.descricao }}</p>
-          <div class="price-row">
-            <span class="price">
-              {{ (product.promo > 0 ? product.promo : product.valor) | currency: 'BRL' }}
-            </span>
-            <span class="stock">{{ product.quantidade }} em estoque</span>
-          </div>
-          <button type="button" class="primary-btn" (click)="onAdd(product)">
-            Adicionar ao carrinho
-          </button>
-        </div>
-      </div>
-    }
-  }
+	@if (product$ | async; as product) {
+		@if (!product) {
+			<p class="text-sm text-[#b9b1a4]">Produto nao encontrado.</p>
+		} @else {
+			<div class="grid items-center gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
+				<div class="grid min-h-[320px] place-items-center overflow-hidden rounded-3xl border border-[#2a2724] bg-[#121212]">
+					@if (product.imageUrl) {
+						<img [ngSrc]="product.imageUrl" width="640" height="720" alt="{{ product.nome }}" class="h-full w-full object-cover" />
+					} @else {
+						<div class="font-[family-name:var(--font-display)] text-3xl tracking-[0.4em] text-[#e5c77a]">DROP</div>
+					}
+				</div>
+				<div class="grid gap-5">
+					<p class="text-[0.6rem] uppercase tracking-[0.5em] text-[#b9b1a4]">street drop</p>
+					<h1 class="font-[family-name:var(--font-display)] text-4xl uppercase tracking-[0.1em] text-[#f4f1e6]">{{ product.nome }}</h1>
+					<p class="text-[#b9b1a4]">{{ product.descricao }}</p>
+					<div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-6">
+						<span class="font-[family-name:var(--font-display)] text-3xl text-[#f4f1e6]">{{ (product.promo > 0 ? product.promo : product.valor) | currency: 'BRL' }}</span>
+						<span class="text-[0.6rem] uppercase tracking-[0.2em] text-[#b9b1a4]">{{ product.quantidade }} em estoque</span>
+					</div>
+					<button type="button" class="w-fit rounded-xl border border-[#e5c77a] bg-[#e5c77a] px-5 py-3 text-[0.65rem] uppercase tracking-[0.25em] text-[#0a0a0a] transition hover:opacity-90" (click)="onAdd(product)">
+						Adicionar ao carrinho
+					</button>
+				</div>
+			</div>
+		}
+	}
 </section>

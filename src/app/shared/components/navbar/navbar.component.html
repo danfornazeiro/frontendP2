@@ -1,26 +1,30 @@
-<nav class="nav-shell">
-  <div class="nav-logo">
-    <a routerLink="/home" class="logo-wordmark">DROP CITY</a>
-    <span class="logo-tag">streetwear lab</span>
-  </div>
+<nav class="sticky top-0 z-20 bg-[rgba(10,10,10,0.9)] border-b border-[#2a2724] backdrop-blur-md px-4 py-5 sm:px-6 lg:px-8">
+  <div class="mx-auto flex w-full max-w-[1200px] items-center justify-between">
+    <div class="flex flex-col gap-1">
+      <a routerLink="/home" class="font-[family-name:var(--font-display)] text-[1.6rem] uppercase tracking-[0.12em] text-[#f4f1e6] no-underline">DROP CITY</a>
+      <span class="text-[0.6rem] uppercase tracking-[0.3em] text-[#b9b1a4]">streetwear lab</span>
+    </div>
 
-  <div class="nav-links">
-    <a routerLink="/home" routerLinkActive="active">Home</a>
-    <a routerLink="/create-product" routerLinkActive="active">Drop</a>
-    <a routerLink="/orders" routerLinkActive="active">Pedidos</a>
-    <a routerLink="/profile" routerLinkActive="active">Perfil</a>
-  </div>
+    <div class="flex items-center gap-6">
+      <div class="hidden lg:flex lg:items-center lg:gap-6">
+        <a routerLink="/home" routerLinkActive="text-[#f4f1e6]" class="text-[0.75rem] uppercase tracking-[0.2em] text-[#b9b1a4] transition-colors hover:text-[#f4f1e6]">Home</a>
+        <a routerLink="/create-product" routerLinkActive="text-[#f4f1e6]" class="text-[0.75rem] uppercase tracking-[0.2em] text-[#b9b1a4] transition-colors hover:text-[#f4f1e6]">Drop</a>
+        <a routerLink="/orders" routerLinkActive="text-[#f4f1e6]" class="text-[0.75rem] uppercase tracking-[0.2em] text-[#b9b1a4] transition-colors hover:text-[#f4f1e6]">Pedidos</a>
+        <a routerLink="/profile" routerLinkActive="text-[#f4f1e6]" class="text-[0.75rem] uppercase tracking-[0.2em] text-[#b9b1a4] transition-colors hover:text-[#f4f1e6]">Perfil</a>
+      </div>
 
-  <div class="nav-actions">
-    <a routerLink="/cart" class="cart-pill">
-      <span>Cart</span>
-      <span class="cart-count">{{ cartCount() }}</span>
-    </a>
+      <div class="flex items-center gap-3 sm:gap-4">
+        <a routerLink="/cart" class="inline-flex items-center gap-2 rounded-full border border-[#e5c77a] px-3 py-2 text-[0.65rem] uppercase tracking-[0.25em] text-[#f4f1e6] no-underline">
+          <span>Cart</span>
+          <span class="rounded-full bg-[#e5c77a] px-2 py-0.5 text-[0.65rem] font-bold text-[#0a0a0a]">{{ cartCount() }}</span>
+        </a>
 
-    @if (userName()) {
-      <button type="button" class="ghost-btn" (click)="logout.emit()">Sair</button>
-    } @else {
-      <a routerLink="/login" class="ghost-btn">Entrar</a>
-    }
+        @if (userName()) {
+          <button type="button" class="rounded-xl border border-[#2a2724] bg-transparent px-4 py-2 text-[0.65rem] uppercase tracking-[0.25em] text-[#f4f1e6] transition-colors hover:border-[#e5c77a] hover:text-[#e5c77a]" (click)="logout.emit()">Sair</button>
+        } @else {
+          <a routerLink="/login" class="rounded-xl border border-[#2a2724] px-4 py-2 text-[0.65rem] uppercase tracking-[0.25em] text-[#f4f1e6] no-underline transition-colors hover:border-[#e5c77a] hover:text-[#e5c77a]">Entrar</a>
+        }
+      </div>
+    </div>
   </div>
 </nav>
