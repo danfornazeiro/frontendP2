@@ -42,7 +42,7 @@ export class LoginPage {
       },
       error: () => {
         this.loading.set(false);
-        this.message.set('Falha ao conectar com o servidor.');
+        this.message.set('Nao foi possivel acessar a loja agora.');
       },
     });
   }

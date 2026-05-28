@@ -40,7 +40,7 @@ export class VitrineApi implements OnInit {
       },
       error: () => {
         this.carregando = false;
-        this.mensagem = 'Não foi possível carregar os produtos do servidor.';
+        this.mensagem = 'Não foi possível carregar os produtos da loja.';
         this.cdr.detectChanges();
       },
     });
