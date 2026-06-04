@@ -1,4 +1,4 @@
-<section class="grid gap-10 px-4 py-10 sm:px-6 lg:px-8">
+<section class="grid gap-8 px-4 py-10 sm:px-6 lg:px-8">
 	<div class="grid gap-4">
 		<p class="text-[0.6rem] uppercase tracking-[0.5em] text-[#b9b1a4]">nova coleção</p>
 		<h1 class="max-w-4xl font-[family-name:var(--font-display)] text-4xl uppercase tracking-[0.08em] sm:text-5xl lg:text-6xl">Streetwear em alta rotacao</h1>
@@ -7,27 +7,46 @@
 		</p>
 	</div>
 
-	<div>
-		<input type="text" placeholder="Buscar por nome" [formControl]="searchControl" aria-label="Buscar produtos" class="w-full rounded-xl border border-[#2a2724] bg-[#121212] px-4 py-3 text-sm text-[#f4f1e6] outline-none transition focus:border-[#e5c77a]" />
-	</div>
+	<div class="grid gap-6 xl:grid-cols-[280px_minmax(0,1fr)]">
+		<aside class="grid gap-4 rounded-3xl border border-[#2a2724] bg-[#0f0e0c] p-4 h-fit sticky top-6">
+			<div class="grid gap-1 border-b border-[#1e1c18] pb-4">
+				<p class="text-[0.55rem] uppercase tracking-[0.35em] text-[#b9b1a4]">categorias</p>
+				<h2 class="font-[family-name:var(--font-display)] text-2xl uppercase tracking-[0.08em] text-[#f4f1e6]">Filtrar vitrine</h2>
+			</div>
 
-	@if (message()) {
-		<p class="rounded-xl border border-[#e5c77a] px-4 py-3 text-[0.65rem] uppercase tracking-[0.2em] text-[#e5c77a]">{{ message() }}</p>
-	}
+			<button type="button" [class]="categoryButtonClass('Todas')" (click)="selectCategory('Todas')" [attr.aria-pressed]="selectedCategory() === 'Todas'">
+				<p class="text-[0.55rem] uppercase tracking-[0.35em]">Todos os produtos</p>
+			</button>
 
-	@if (loading()) {
-		<p class="text-[0.65rem] uppercase tracking-[0.25em] text-[#e5c77a]">Carregando novidades...</p>
-	}
-
-	<div class="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
-		@if (products$ | async; as products) {
-			@if (products.length === 0) {
-				<p class="text-sm text-[#b9b1a4]">Nenhum produto encontrado.</p>
-			} @else {
-				@for (product of products; track trackProduct($index, product)) {
-					<app-product-card [product]="product" (view)="onView($event)" (addToCart)="onAdd($event)" />
-				}
+			@for (category of categories; track category) {
+				<button type="button" [class]="categoryButtonClass(category)" (click)="selectCategory(category)" [attr.aria-pressed]="selectedCategory() === category">
+					<p class="text-[0.55rem] uppercase tracking-[0.35em]">{{ category }}</p>
+				</button>
 			}
-		}
+		</aside>
+
+		<div class="grid gap-4">
+			<div class="grid gap-4 rounded-3xl border border-[#2a2724] bg-[#121212] p-4 sm:p-6">
+				<input type="text" placeholder="Buscar por nome ou descrição" [formControl]="searchControl" aria-label="Buscar produtos" class="w-full rounded-xl border border-[#2a2724] bg-[#0f0e0c] px-4 py-3 text-sm text-[#f4f1e6] outline-none transition focus:border-[#e5c77a]" />
+
+				@if (message()) {
+					<p class="rounded-xl border border-[#e5c77a] px-4 py-3 text-[0.65rem] uppercase tracking-[0.2em] text-[#e5c77a]">{{ message() }}</p>
+				}
+
+				@if (loading()) {
+					<p class="text-[0.65rem] uppercase tracking-[0.25em] text-[#e5c77a]">Carregando novidades...</p>
+				}
+			</div>
+
+			<div class="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
+				@if (filteredProducts().length === 0) {
+					<p class="text-sm text-[#b9b1a4]">Nenhum produto encontrado para o filtro selecionado.</p>
+				} @else {
+					@for (product of filteredProducts(); track trackProduct($index, product)) {
+						<app-product-card [product]="product" (view)="onView($event)" (addToCart)="onAdd($event)" />
+					}
+				}
+			</div>
+		</div>
 	</div>
 </section>

@@ -62,7 +62,18 @@ export class CartPage implements OnInit {
       return;
     }
 
-    this.appState.removeFromCartLocal(id);
+    const clientId = this.appState.getClientId();
+    this.appState.ensureCartId$().pipe(take(1)).subscribe((cartId) => {
+      if (!cartId) {
+        this.message.set('Carrinho nao encontrado.');
+        return;
+      }
+
+      this.appState.removeFromCart(clientId, cartId, id).subscribe({
+        next: () => this.message.set('Produto removido do carrinho.'),
+        error: () => this.message.set('Nao foi possivel remover o produto.'),
+      });
+    });
   }
 
   checkout(): void {

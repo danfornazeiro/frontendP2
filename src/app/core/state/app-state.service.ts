@@ -43,7 +43,16 @@ export class AppStateService {
       return this.products$;
     }
 
-    return this.productService.searchByName(term);
+    const normalized = term.trim().toLowerCase();
+    return this.products$.pipe(
+      map((products) =>
+        products.filter((product) => {
+          const name = product.nome.toLowerCase();
+          const description = product.descricao?.toLowerCase() ?? '';
+          return name.includes(normalized) || description.includes(normalized);
+        })
+      )
+    );
   }
 
   createProduct(payload: Omit<Product, 'id' | 'codigo'>): Observable<Product> {
@@ -93,13 +102,17 @@ export class AppStateService {
         localStorage.setItem('clientId', id.toString());
 
         if (!user.cesta?.id) {
-          return this.userService.getById(id).pipe(
+          return this.getUserFromListById(id).pipe(
             tap((fullUser) => {
+              if (!fullUser) {
+                return;
+              }
               this.syncCartIdFromUser(fullUser, true);
               this.syncOrdersFromUser(fullUser);
               this.storeUserSnapshot(fullUser);
               this.userSubject.next(fullUser);
-            })
+            }),
+            map((fullUser) => fullUser ?? user)
           );
         }
 
@@ -130,13 +143,39 @@ export class AppStateService {
       this.ordersSubject.next([]);
     }
 
-    return this.userService.getById(Number(storedId)).pipe(
+    return this.getUserFromListById(Number(storedId)).pipe(
       tap((user) => {
+        if (!user) {
+          return;
+        }
         this.syncCartIdFromUser(user, true);
         this.syncOrdersFromUser(user);
         this.storeUserSnapshot(user);
         this.userSubject.next(user);
       }),
+      map((user) => user ?? this.userSubject.value),
+      catchError(() => of(this.userSubject.value))
+    );
+  }
+
+  refreshCurrentUser(): Observable<UserProfile | null> {
+    const clientId = this.getClientId();
+    if (!clientId) {
+      this.userSubject.next(null);
+      return of(null);
+    }
+
+    return this.getUserFromListById(clientId).pipe(
+      tap((user) => {
+        if (!user) {
+          return;
+        }
+        this.syncCartIdFromUser(user, true);
+        this.syncOrdersFromUser(user);
+        this.storeUserSnapshot(user);
+        this.userSubject.next(user);
+      }),
+      map((user) => user ?? this.userSubject.value),
       catchError(() => of(this.userSubject.value))
     );
   }
@@ -175,13 +214,16 @@ export class AppStateService {
       return of(null);
     }
 
-    return this.userService.getById(clientId).pipe(
+    return this.getUserFromListById(clientId).pipe(
       tap((user) => {
+        if (!user) {
+          return;
+        }
         this.syncCartIdFromUser(user, true);
         this.storeUserSnapshot(user);
         this.userSubject.next(user);
       }),
-      map((user) => user.cesta?.id ?? null),
+      map((user) => user?.cesta?.id ?? null),
       catchError(() => of(null))
     );
   }
@@ -191,12 +233,22 @@ export class AppStateService {
   }
 
   updateProfile(payload: Partial<UserProfile>): Observable<UserProfile> {
-    const id = payload.id ?? payload.codigo ?? this.resolveUserId(this.userSubject.value);
-    return this.userService.update({ ...payload, id }).pipe(
-      tap((updated) => {
-        this.storeUserSnapshot(updated);
-        this.userSubject.next(updated);
-      })
+    const currentUser = this.userSubject.value ?? this.getUserSnapshot();
+    const id = payload.id ?? payload.codigo ?? this.resolveUserId(currentUser);
+    const mergedProfile = {
+      ...currentUser,
+      ...payload,
+      id,
+      codigo: id,
+    } satisfies Partial<UserProfile> & { id: number; codigo: number };
+
+    return this.userService.update(mergedProfile).pipe(
+      tap(() => {
+        const nextUser = mergedProfile as UserProfile;
+        this.storeUserSnapshot(nextUser);
+        this.userSubject.next(nextUser);
+      }),
+      map(() => mergedProfile as UserProfile)
     );
   }
 
@@ -207,13 +259,17 @@ export class AppStateService {
         localStorage.setItem('clientId', id.toString());
 
         if (!created.cesta?.id) {
-          return this.userService.getById(id).pipe(
+          return this.getUserFromListById(id).pipe(
             tap((fullUser) => {
+              if (!fullUser) {
+                return;
+              }
               this.syncCartIdFromUser(fullUser, true);
               this.syncOrdersFromUser(fullUser);
               this.storeUserSnapshot(fullUser);
               this.userSubject.next(fullUser);
-            })
+            }),
+            map((fullUser) => fullUser ?? created)
           );
         }
 
@@ -240,7 +296,21 @@ export class AppStateService {
   addToCart(clienteId: number, carrinhoId: string, produtoId: number[]): Observable<Cart> {
     return this.cartService.addItems(clienteId, carrinhoId, produtoId).pipe(
       map((cart) => this.normalizeCart(cart)),
-      tap((cart) => this.cartSubject.next(cart))
+      tap((cart) => {
+        this.cartSubject.next(cart);
+        this.loadProducts(true).subscribe();
+      })
+    );
+  }
+
+  removeFromCart(clienteId: number | null, carrinhoId: string, produtoId: number): Observable<Cart> {
+    return this.cartService.removeItem(carrinhoId, produtoId).pipe(
+      map((cart) => this.normalizeCart(cart)),
+      tap((cart) => {
+        this.cartSubject.next(cart);
+        this.loadProducts(true).subscribe();
+      }),
+      catchError(() => of(this.cartSubject.value ?? ({ id: '', clienteId: clienteId ?? 0, produtoId: [] } as Cart)))
     );
   }
 
@@ -266,6 +336,7 @@ export class AppStateService {
     return this.orderService.create(carrinhoId).pipe(
       tap((order) => {
         this.ordersSubject.next([...this.ordersSubject.value, this.normalizeOrder(order)]);
+        this.loadProducts(true).subscribe();
       })
     );
   }
@@ -372,5 +443,11 @@ export class AppStateService {
     }
 
     return user.id ?? user.codigo ?? 0;
+  }
+
+  private getUserFromListById(id: number): Observable<UserProfile | null> {
+    return this.userService.getAll().pipe(
+      map((users) => users.find((user) => this.resolveUserId(user) === id) ?? null)
+    );
   }
 }

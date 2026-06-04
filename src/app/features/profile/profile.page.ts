@@ -17,6 +17,6 @@ export class ProfilePage implements OnInit {
   readonly user$ = this.appState.user$;
 
   ngOnInit(): void {
-    this.appState.restoreUserFromStorage().subscribe();
+    this.appState.refreshCurrentUser().subscribe();
   }
 }

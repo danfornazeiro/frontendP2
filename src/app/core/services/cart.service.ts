@@ -17,4 +17,8 @@ export class CartService {
   addItems(clienteId: number, carrinhoId: string, produtoId: number[]): Observable<Cart> {
     return this.http.post<Cart>(`${this.baseUrl}/${clienteId}/${carrinhoId}`, { produtoId });
   }
+
+  removeItem(carrinhoId: string, produtoId: number): Observable<Cart> {
+    return this.http.delete<Cart>(`${this.baseUrl}/${carrinhoId}/produto/${produtoId}`);
+  }
 }

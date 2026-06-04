@@ -2,6 +2,7 @@ import { AsyncPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, OnInit, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
+import { PRODUCT_CATEGORIES, ProductCategory } from '../../core/models/product-category';
 import { Product } from '../../core/models/product.model';
 import { AppStateService } from '../../core/state/app-state.service';
 
@@ -18,9 +19,11 @@ export class AdminProductPage implements OnInit {
   readonly products$ = this.appState.products$;
   readonly message = signal<string | null>(null);
   readonly selectedId = signal<number | null>(null);
+  readonly categories = PRODUCT_CATEGORIES;
 
   readonly form = new FormGroup({
     nome: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+    categoria: new FormControl<ProductCategory>('Camiseta', { nonNullable: true, validators: [Validators.required] }),
     imageUrl: new FormControl('', { nonNullable: true }),
     descricao: new FormControl('', { nonNullable: true }),
     valor: new FormControl(0, { nonNullable: true }),
@@ -58,6 +61,7 @@ export class AdminProductPage implements OnInit {
     this.selectedId.set(this.resolveProductId(product));
     this.form.patchValue({
       nome: product.nome,
+      categoria: product.categoria ?? 'Camiseta',
       imageUrl: product.imageUrl ?? '',
       descricao: product.descricao ?? '',
       valor: product.valor,
@@ -81,6 +85,7 @@ export class AdminProductPage implements OnInit {
   resetForm(): void {
     this.form.reset({
       nome: '',
+      categoria: 'Camiseta',
       imageUrl: '',
       descricao: '',
       valor: 0,

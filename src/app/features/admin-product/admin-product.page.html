@@ -17,6 +17,14 @@
 					<input type="text" formControlName="nome" class="rounded-xl border border-[#2a2724] bg-transparent px-4 py-3 text-[#f4f1e6] outline-none transition focus:border-[#e5c77a]" />
 				</label>
 				<label class="grid gap-2 text-[0.75rem] uppercase tracking-[0.2em] text-[#b9b1a4]">
+					<span>Categoria</span>
+					<select formControlName="categoria" class="rounded-xl border border-[#2a2724] bg-[#121212] px-4 py-3 text-[#f4f1e6] outline-none transition focus:border-[#e5c77a]">
+						@for (category of categories; track category) {
+							<option [value]="category">{{ category }}</option>
+						}
+					</select>
+				</label>
+				<label class="grid gap-2 text-[0.75rem] uppercase tracking-[0.2em] text-[#b9b1a4]">
 					<span>Imagem</span>
 					<input type="text" formControlName="imageUrl" placeholder="https://" class="rounded-xl border border-[#2a2724] bg-transparent px-4 py-3 text-[#f4f1e6] outline-none transition focus:border-[#e5c77a]" />
 				</label>
@@ -53,6 +61,7 @@
 						<div class="flex flex-col gap-3 rounded-xl border border-[#2a2724] p-4 sm:flex-row sm:items-center sm:justify-between">
 							<div class="grid gap-1">
 								<p class="font-[family-name:var(--font-display)] text-xl uppercase tracking-[0.08em] text-[#f4f1e6]">{{ product.nome }}</p>
+								<p class="text-[0.55rem] uppercase tracking-[0.3em] text-[#e5c77a]">{{ product.categoria ?? 'Sem categoria' }}</p>
 								<p class="text-xs text-[#b9b1a4]">{{ product.quantidade }} itens</p>
 							</div>
 							<div class="flex flex-wrap gap-2">

@@ -22,9 +22,10 @@ export class UserService {
     return this.http.post<UserProfile>(this.baseUrl, profile);
   }
 
-  update(profile: Partial<UserProfile> & { id?: number; codigo?: number }): Observable<UserProfile> {
+  update(profile: Partial<UserProfile> & { id?: number; codigo?: number }): Observable<void> {
     const id = profile.id ?? profile.codigo;
-    return this.http.patch<UserProfile>(`${this.baseUrl}/${id}`, profile);
+    const payload = { ...profile, id, codigo: id };
+    return this.http.patch<void>(`${this.baseUrl}/${id}`, payload);
   }
 
   changePassword(id: number, payload: { senha: string }): Observable<void> {
